@@ -1,36 +1,22 @@
-import express from 'express'
-import { login } from '../controllers/auth.controller.js'
+import express from 'express';
+import { login, resetPassword } from '../controllers/auth.controller.js';
 
-const router = express.Router()
+const router = express.Router();
 
 /**
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: 사용자 로그인
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 example: 1234
- *     responses:
- *       200:
- *         description: JWT 토큰 반환
- *       401:
- *         description: 인증 실패
+ *     summary: 로그인 (User 또는 Store)
  */
-router.post('/login', login)
+router.post('/login', login);
 
-export default router
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   post:
+ *     summary: 비밀번호 초기화
+ */
+router.post('/reset-password', resetPassword);
+
+export default router;

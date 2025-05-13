@@ -1,19 +1,37 @@
-import User from '../models/user.model.js'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
+import Store from '../models/store.model.js';
 
 export const login = async (req, res) => {
-  const { email, password } = req.body
-  try {
-    const user = await User.findOne({ email })
-    if (!user) return res.status(401).json({ message: '유효하지 않은 사용자입니다.' })
+  const { username, password, type } = req.body; // type: 'user' 또는 'store'
+  const Model = type === 'user' ? User : Store;
 
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' })
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
-    res.json({ token })
-  } catch (err) {
-    res.status(500).json({ message: '서버 오류', error: err.message })
+  const entity = await Model.findOne(type === 'user' ? { username } : { storeId: username });
+  if (!entity || !(await entity.matchPassword(password))) {
+    return res.status(401).json({ message: 'Invalid credentials' });
   }
-}
+
+  const token = jwt.sign(
+    { id: entity._id, type },
+    process.env.JWT_SECRET,
+    { expiresIn: '2h' } // 2시간 세션 유지
+  );
+
+  res.json({ token });
+};
+
+// 비밀번호 초기화 (간단 버전)
+export const resetPassword = async (req, res) => {
+  const { username, newPassword, type } = req.body;
+  const Model = type === 'user' ? User : Store;
+
+  const entity = await Model.findOne(type === 'user' ? { username } : { storeId: username });
+  if (!entity) {
+    return res.status(404).json({ message: 'Not found' });
+  }
+
+  entity.password = newPassword;
+  await entity.save();
+
+  res.json({ message: 'Password reset successful' });
+};
