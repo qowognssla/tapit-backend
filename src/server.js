@@ -8,8 +8,10 @@ import dotenv from 'dotenv'
 import authRoutes from './routes/auth.routes.js'
 import storeRoutes from './routes/store.routes.js'
 import chatRoutes from './routes/chat.routes.js'
+import userRoutes from './routes/user.routes.js'
 import { initSocket } from './socket/signaling.js'
 import initSwagger from './swagger.js'
+import { userInfo } from 'os'
 
 dotenv.config()
 
@@ -27,6 +29,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/stores', storeRoutes)
 app.use('/api/chat', chatRoutes)
+app.use('/api/users', userRoutes)
 
 // Swagger (라우트 이후에 위치해도 OK)
 initSwagger(app)

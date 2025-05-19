@@ -10,7 +10,18 @@ const options = {
       description: 'Backend API for TapIt platform',
     },
     servers: [{ url: 'http://localhost:5000' }],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  security: [{ bearerAuth: [] }], // 모든 경로에 기본 적용
   },
+
   apis: ['./src/routes/*.js'], // 주석 기반 문서 생성
 }
 
