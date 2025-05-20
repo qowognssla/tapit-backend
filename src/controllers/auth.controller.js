@@ -14,7 +14,7 @@ export const login = async (req, res) => {
   const token = jwt.sign(
     { id: entity._id, type },
     process.env.JWT_SECRET,
-    { expiresIn: '2h' } // 2시간 세션 유지
+    { expiresIn: '12h' } // 12시간 세션 유지
   );
 
   res.json({ token });

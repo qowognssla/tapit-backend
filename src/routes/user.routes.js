@@ -82,19 +82,28 @@ router.get('/', protect, getUserList);
 router.put('/:id', protect, updateUser);
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/by-username/{username}:
  *   delete:
- *     summary: 사용자 삭제
+ *     summary: 사용자 삭제 (username 기준)
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: username
  *         required: true
- *         description: 사용자 ID
+ *         description: 삭제할 사용자 username
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: 삭제 성공
+ *       404:
+ *         description: 사용자를 찾을 수 없음
+ *       400:
+ *         description: 잘못된 요청
  */
-router.delete('/:id', protect, deleteUser);
+router.delete('/by-username/:username', protect, deleteUser);
 export default router;
 // import express from 'express';
 // import { protect } from '../middleware/auth.middleware.js';

@@ -28,5 +28,9 @@ const options = {
 const specs = swaggerJsdoc(options)
 
 export default (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
-}
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+    swaggerOptions: {
+      persistAuthorization: true  // ✅ 인증 유지
+    }
+  }));
+};
