@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 const storeSchema = new mongoose.Schema({
   storeId: { type: String, required: true, unique: true },  // 로그인 아이디 (상점 전용)
   name: { type: String, required: true },                   // 상점명
+  owner: { type: String, required: true },               // 상점주 이름
   password: { type: String, required: true },
   phone: { type: String },
   address: { type: String },
