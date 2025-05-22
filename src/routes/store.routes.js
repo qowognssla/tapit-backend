@@ -12,6 +12,43 @@ const router = express.Router()
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Store:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         storeId:
+ *           type: string
+ *         name:
+ *           type: string
+ *         owner:
+ *           type: string
+ *         phone:
+ *           type: string
+ *         address:
+ *           type: string
+ *         memo:
+ *           type: string
+ *         managers:
+ *           type: array
+ *           items:
+ *             type: string
+ *             description: User ObjectId
+ *         status:
+ *           type: string
+ *           enum: [active, inactive, dormant, terminated]
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
  * /api/stores:
  *   get:
  *     summary: 모든 가맹점 목록 조회
@@ -26,28 +63,7 @@ const router = express.Router()
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                   storeId:
- *                     type: string
- *                   name:
- *                     type: string
- *                   owner:
- *                     type: string
- *                   phone:
- *                     type: string
- *                   address:
- *                     type: string
- *                   memo:
- *                     type: string
- *                   status:
- *                     type: string
- *                   createdAt:
- *                     type: string
- *                   updatedAt:
- *                     type: string
+ *                 $ref: '#/components/schemas/Store'
  */
 router.get('/', getAllStores)
 
@@ -86,9 +102,20 @@ router.get('/', getAllStores)
  *               password:
  *                 type: string
  *                 example: tapit1234
+ *               managers:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               status:
+ *                 type: string
+ *                 enum: [active, inactive, dormant, terminated]
  *     responses:
  *       201:
  *         description: 생성된 가맹점 정보 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Store'
  */
 router.post('/', createStore)
 
