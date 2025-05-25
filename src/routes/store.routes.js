@@ -1,5 +1,5 @@
 import express from 'express'
-import { createStore, getAllStores } from '../controllers/store.controller.js'
+import { createStore, getAllStores, updateStore, deleteStore } from '../controllers/store.controller.js'
 
 const router = express.Router()
 
@@ -65,7 +65,7 @@ const router = express.Router()
  *               items:
  *                 $ref: '#/components/schemas/Store'
  */
-router.get('/', getAllStores)
+router.get('/', getAllStores) 
 
 /**
  * @swagger
@@ -118,5 +118,83 @@ router.get('/', getAllStores)
  *               $ref: '#/components/schemas/Store'
  */
 router.post('/', createStore)
+
+/**
+ * @swagger
+ * /api/stores/{id}:
+ *   put:
+ *     summary: 가맹점 정보 수정
+ *     tags: [Stores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: 수정할 가맹점 ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               owner:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               memo:
+ *                 type: string
+ *               managers:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               status:
+ *                 type: string
+ *                 enum: [active, inactive, dormant, terminated]
+ *     responses:
+ *       200:
+ *         description: 수정된 가맹점 정보 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Store'
+ */
+router.put('/:id', updateStore)
+
+/**
+ * @swagger
+ * /api/stores/{id}:
+ *   delete:
+ *     summary: 가맹점 삭제
+ *     tags: [Stores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: 삭제할 가맹점 ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: 삭제 성공 메시지 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Deleted
+ */
+router.delete('/:id', deleteStore)
 
 export default router
