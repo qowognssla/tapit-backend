@@ -40,7 +40,7 @@ import { createUser, getUserList, updateUser, deleteUser } from '../controllers/
  *       201:
  *         description: Created
  */
-router.post('/', protect, createUser);
+router.post('/', createUser);
 /**
  * @swagger
  * /api/users:

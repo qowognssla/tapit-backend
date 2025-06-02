@@ -37,6 +37,30 @@ initSwagger(app)
 // WebSocket
 initSocket(io)
 
+// --- Socket.IO Chat Events ---
+io.on('connection', socket => {
+  console.log('user connected', socket.id)
+
+  // 채팅방 참여
+  socket.on('joinRoom', ({ roomId }) => {
+    socket.join(roomId)
+  })
+
+  // 메시지 전송 (모두에게 실시간 emit)
+  socket.on('sendMessage', msg => {
+    io.to(msg.roomId).emit('newMessage', msg)
+  })
+
+  // 타이핑 표시
+  socket.on('typing', ({ roomId, userId }) => {
+    socket.to(roomId).emit('typing', { userId })
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected', socket.id)
+  })
+})
+
 // DB 연결 및 서버 실행
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

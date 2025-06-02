@@ -1,9 +1,21 @@
 import express from 'express'
+import {
+  createRoom, getUserRooms, updateRoom, deleteRoom,
+  postMessage, getMessages, updateMessage, deleteMessage
+} from '../controllers/chat.controller.js'
+
 const router = express.Router()
 
-// 예시 라우트
-router.get('/', (req, res) => {
-  res.send('Chat route works!')
-})
+// Rooms
+router.post('/rooms', createRoom)
+router.get('/rooms', getUserRooms)
+router.put('/rooms/:id', updateRoom)
+router.delete('/rooms/:id', deleteRoom)
 
-export default router  // ✅ 반드시 이 줄 필요
+// Messages
+router.post('/messages', postMessage)
+router.get('/messages/:roomId', getMessages)
+router.patch('/messages/:id', updateMessage)
+router.delete('/messages/:id', deleteMessage)
+
+export default router
